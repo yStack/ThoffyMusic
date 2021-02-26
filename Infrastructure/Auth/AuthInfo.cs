@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Infrastructure.Auth
 {
-    public class AuthInfoHelper
+    class AuthInfoHelper
     {
         private JObject _respObj;
 
@@ -14,6 +14,9 @@ namespace Infrastructure.Auth
             _respObj = respObj;
         }
 
+        /// <summary>
+        /// 状体码
+        /// </summary>
         public int Code
         {
             get
@@ -28,6 +31,9 @@ namespace Infrastructure.Auth
             }
         }
 
+        /// <summary>
+        /// 错误信息
+        /// </summary>
         public string ErrMsg
         {
             get
@@ -42,9 +48,18 @@ namespace Infrastructure.Auth
             }
         }
 
-    
-
-
+        /// <summary>
+        /// UserID
+        /// </summary>
+        public int UserID
+        {
+            get
+            {
+                var jtoken = _respObj.GetValue("account");
+                var uid = jtoken.Value<int>("id");
+                return uid;
+            }
+        }
 
     }
 }

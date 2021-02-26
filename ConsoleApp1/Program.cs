@@ -1,6 +1,8 @@
 ﻿using System;
 using Infrastructure;
 using Infrastructure.Auth;
+using Un4seen.Bass;
+
 
 namespace ConsoleApp1
 {
@@ -8,30 +10,32 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            EmailLogin e = new EmailLogin();
-            string email = "vonfat@126.com";
-            string pass = "wy&86147965";
-            string phone = "15295774040";
-            //var t =  e.Login(email, "", false, pass);
 
-            QrCodeLogin p = new QrCodeLogin();
-            var t = p.Login("", phone, true, pass);
+            //string email = "vonfat@126.com";
+            //string pass = "wy&86147965";
+            //string phone = "15295774040";
+            //User user = new Infrastructure.User();
+            //user.Email = email;
+            //user.CellPhone = phone;
+            //user.Password = pass;
 
-            User user = new Infrastructure.User();
+            //var t = user.Login(0);
+            //user.GetPlaylist();
 
-            LoginContext lc = new LoginContext(p, user);
-            var f = lc.Login(user, true);
-            string key = f.Value<string>("key");
-            string qr = f.Value<string>("qrCode");
+            string url = "http://m8.music.126.net/20210226224613/97dbc14ae4892b7d946c66db0f900c39/ymusic/0fd6/4f65/43ed/a8772889f38dfcb91c04da915b301617.mp3";
+            BassNet.Registration("vonfat@gmail.com", "2X17241816152222");
 
-            lc.QrCheck(key);
+            if (Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero))
+            {
+                var stream = Bass.BASS_StreamCreateURL(url, 0, BASSFlag.BASS_SAMPLE_FLOAT, null, IntPtr.Zero);
+                Bass.BASS_ChannelPlay(stream, false);
+            }
+      
+      
 
-
-            //AuthInfoHelper at = new AuthInfoHelper(t);
-            //int code = at.Code;
-            //string msg = at.ErrMsg;
-            //Console.WriteLine(code);
             Console.ReadKey();
+
+
         }
     }
 }

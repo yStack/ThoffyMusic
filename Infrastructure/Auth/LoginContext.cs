@@ -1,26 +1,21 @@
-﻿using Infrastructure.Auth;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Auth
 {
     /// <summary>
     /// 策略模式Context类
     /// </summary>
-    public class LoginContext
+    class LoginContext
     {
         //登录策略
         private ILoginStrategy _loginStrategy;
 
         //user对象
-        private User _user;
+        public User User { get; private set; }
+
 
         /// <summary>
         /// 构造函数
@@ -30,8 +25,9 @@ namespace Infrastructure.Auth
         public LoginContext(ILoginStrategy loginStrategy, User user)
         {
             _loginStrategy = loginStrategy;
-            _user = user;
+            User = user;
         }
+
 
         /// <summary>
         /// 登录
@@ -44,27 +40,67 @@ namespace Infrastructure.Auth
             return _loginStrategy.Login(user.Email, user.CellPhone, isQrLogin, user.Password);
         }
 
+
+        /// <summary>
+        /// 登录
+        /// </summary>
+        /// <returns></returns>
+        public JObject Login()
+        {
+            return Login(User, false);
+        }
+
+        /// <summary>
+        /// 使用二维码登录
+        /// </summary>
+        /// <returns></returns>
+        public JObject LoginQrCode()
+        {
+            return Login(User, true);
+        }
+
+
+        /// <summary>
+        /// 退出登录
+        /// </summary>
+        /// <returns></returns>
+        public bool Logout()
+        {
+            var url = UrlHelper.RootUrl + "/logout";
+            var str = UrlHelper.Get(url);
+            return JsonHelper.GetCode(str) == 200;
+        }
+
+
+        /// <summary>
+        /// 检查二维码登录是否成功
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool QrCheck(string key)
         {
             string checkUrl = UrlHelper.RootUrl + $"/login/qr/check?key={key}";
-           
+
             while (true)
             {
                 var resp = UrlHelper.Get(checkUrl);
-                JObject j = JObject.Parse(resp);
-                if (j.Value<int>("code") == 803)
+                if (JsonHelper.GetCode(resp) == 803)
                 {
-                    //登录成功
-                    //Todo:
+                    return true;
                 }
                 Thread.Sleep(50);
-            }
-
+            };
         }
 
+        public int Refresh()
+        {
+            string url = UrlHelper.RootUrl + "/login/refresh";
+            string resp = UrlHelper.Get(url);
+            return 1;
+        }
     }
 
-    public interface ILoginStrategy
+    interface ILoginStrategy
     {
         /// <summary>
         /// 用户登录的方法接口
@@ -75,11 +111,11 @@ namespace Infrastructure.Auth
         /// <param name="password">密码</param>
         /// <returns></returns>
         JObject Login(string email, string cellPhone, bool isQrLogin, string password);
-      
+
     }
 
 
-    public class EmailLogin : ILoginStrategy
+    class EmailLogin : ILoginStrategy
     {
 
         public JObject Login(string email, string cellPhone, bool isQrLogin, string password)
@@ -106,7 +142,7 @@ namespace Infrastructure.Auth
         }
     }
 
-    public class PhoneLogin : ILoginStrategy
+    class PhoneLogin : ILoginStrategy
     {
 
         public JObject Login(string email, string cellPhone, bool isQrLogin, string password)
@@ -134,7 +170,7 @@ namespace Infrastructure.Auth
     }
 
 
-    public class QrCodeLogin : ILoginStrategy
+    class QrCodeLogin : ILoginStrategy
     {
         public JObject Login(string email, string cellPhone, bool isQrLogin, string password)
         {
@@ -165,6 +201,7 @@ namespace Infrastructure.Auth
             }
             var qrCode = j["data"]["qrimg"].Value<string>();
 
+            // 返回QRCode和key
             var result = new { key = key, qrCode = qrCode };
             var jObj = JObject.Parse(JsonConvert.SerializeObject(result).ToString());
             return jObj;
