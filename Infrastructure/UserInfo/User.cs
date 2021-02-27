@@ -2,6 +2,9 @@
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
+using Infrastructure.UserInfo;
+using System.Linq;
+using System;
 
 namespace Infrastructure
 {
@@ -48,7 +51,29 @@ namespace Infrastructure
         /// </summary>
         public int ID { get; set; } = -1;
 
+
+        /// <summary>
+        /// 播放列表
+        /// </summary>
+        public List<Playlist> Playlist
+        {
+            get
+            {
+                if(ID != -1)
+                {
+                    var resp = UrlHelper.Get(UrlHelper.RootUrl + $"/user/playlist?uid={ID}");
+                   return JsonHelper.GetPlaylist(resp);
+                }
+                throw new Exception("user's id is incorrect");
+            }
+        }
+
         #endregion
+
+        public User()
+        {
+
+        }
 
 
         #region public methods
@@ -96,15 +121,7 @@ namespace Infrastructure
             return _loginContext.Logout();
         }
 
-        public List<string> GetPlaylist()
-        {
-            var resp = UrlHelper.Get(UrlHelper.RootUrl + $"/user/playlist?uid={ID}");
-            using (StreamWriter sw = new StreamWriter("D:/playlist.txt", true))
-            {
-                sw.WriteLine(JObject.Parse(resp).ToString());
-            }
-             return new List<string>();
-        }
+  
 
         #endregion
 
