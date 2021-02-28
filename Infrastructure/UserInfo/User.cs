@@ -5,6 +5,7 @@ using System.IO;
 using Infrastructure.UserInfo;
 using System.Linq;
 using System;
+using System.ComponentModel;
 
 namespace Infrastructure
 {
@@ -18,10 +19,25 @@ namespace Infrastructure
     /// <summary>
     /// User对象
     /// </summary>
-    public class User
+    public class User : INotifyPropertyChanged
     {
+        #region INotifyPropertyChanged Interface 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
+
         #region fields
         private LoginContext _loginContext;
+        private string _cellPhone;
+        private string _email;
+        private string _password;
+
         #endregion
 
 
@@ -34,17 +50,50 @@ namespace Infrastructure
         /// <summary>
         /// 电话
         /// </summary>
-        public string CellPhone { get; set; }
+        public string CellPhone
+        {
+            get { return _cellPhone; }
+            set
+            {
+                if (value != _cellPhone)
+                {
+                    _cellPhone = value;
+                    OnPropertyChanged("CellPhone");
+                }
+            }
+        }
 
         /// <summary>
         /// 邮箱地址
         /// </summary>
-        public string Email { get; set; }
+        public string Email
+        {
+            get { return _email; }
+            set
+            {
+                if (value != _email)
+                {
+                    _email = value;
+                    OnPropertyChanged("Email");
+                }
+            }
+        }
 
         /// <summary>
         /// 用户输入的密码
         /// </summary>
-        public string Password { get; set; }
+        public string Password
+        {
+            get { return _password; }
+            set
+            {
+                if (value != _password)
+                {
+                    _password = value;
+                    OnPropertyChanged("PassWord");
+                }
+            }
+        }
 
         /// <summary>
         /// 用户ID
@@ -59,10 +108,10 @@ namespace Infrastructure
         {
             get
             {
-                if(ID != -1)
+                if (ID != -1)
                 {
                     var resp = UrlHelper.Get(UrlHelper.RootUrl + $"/user/playlist?uid={ID}");
-                   return JsonHelper.GetPlaylist(resp);
+                    return JsonHelper.GetPlaylist(resp);
                 }
                 throw new Exception("user's id is incorrect");
             }
@@ -74,7 +123,6 @@ namespace Infrastructure
         {
 
         }
-
 
         #region public methods
         /// <summary>
@@ -120,8 +168,6 @@ namespace Infrastructure
         {
             return _loginContext.Logout();
         }
-
-  
 
         #endregion
 
