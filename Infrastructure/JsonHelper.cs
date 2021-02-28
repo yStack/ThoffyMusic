@@ -23,6 +23,12 @@ namespace Infrastructure
             return code;
         }
 
+
+        /// <summary>
+        /// 保存json到文件
+        /// </summary>
+        /// <param name="jstr"></param>
+        /// <param name="path"></param>
         public static void Write(string jstr, string path)
         {
             using (StreamWriter sw = new StreamWriter(path, false))
@@ -33,6 +39,11 @@ namespace Infrastructure
         }
 
 
+        /// <summary>
+        /// 获取歌单
+        /// </summary>
+        /// <param name="jstr"></param>
+        /// <returns></returns>
         public static List<Playlist> GetPlaylist(string jstr)
         {
             JObject j = JObject.Parse(jstr);
@@ -47,6 +58,12 @@ namespace Infrastructure
             return playlist;
         }
 
+
+        /// <summary>
+        /// 解析歌单
+        /// </summary>
+        /// <param name="jstr"></param>
+        /// <returns></returns>
         public static List<Song> GetSongList(string jstr)
         {
             JObject j = JObject.Parse(jstr);
@@ -57,6 +74,18 @@ namespace Infrastructure
                 return new Song(string.Empty, id, v);
             }).ToList();
             return songList;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="jstr"></param>
+        /// <returns></returns>
+        public static List<string> GetSongUrl(string jstr)
+        {
+            JObject j = JObject.Parse(jstr);
+            var songUrl = j["data"].Select(t => { return t["url"].Value<string>(); }).ToList();
+            return songUrl;
         }
     }
 }

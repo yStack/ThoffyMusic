@@ -8,15 +8,18 @@ namespace Infrastructure.UserInfo
     /// </summary>
     public class Playlist : InfoBase
     {
-        public List<Song> GetSongList()
+        public List<Song> SongList
         {
-            var resp = UrlHelper.Get(UrlHelper.RootUrl + $"/playlist/detail?id={this.Id}");
-            return JsonHelper.GetSongList(resp);
+            get
+            {
+                var resp = UrlHelper.Get(UrlHelper.RootUrl + $"/playlist/detail?id={this.Id}");
+                return JsonHelper.GetSongList(resp);
+            }
         }
 
         public Playlist(string name, UInt64 id) : base(name, id)
         {
-          
+
         }
     }
 }

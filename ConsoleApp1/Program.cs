@@ -2,7 +2,7 @@
 using Infrastructure;
 using Infrastructure.Auth;
 using Un4seen.Bass;
-
+using BassEngine;
 
 namespace ConsoleApp1
 {
@@ -20,17 +20,19 @@ namespace ConsoleApp1
 
             var t = user.Login(0);
             var lst = user.Playlist;
+            var testLst = lst[0];
+            var songlist = testLst.SongList;
 
-            //string url = "http://m8.music.126.net/20210227174808/7f351b7dbb59eb544270de9900570fbe/ymusic/0fd6/4f65/43ed/a8772889f38dfcb91c04da915b301617.mp3";
-            //BassNet.Registration("vonfat@gmail.com", "2X17241816152222");
+            var song = songlist[1];
 
-            //if (Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero))
-            //{
-            //    var stream = Bass.BASS_StreamCreateURL(url, 0, BASSFlag.BASS_SAMPLE_FLOAT, null, IntPtr.Zero);
-            //    Bass.BASS_ChannelPlay(stream, false);
-            //}
-      
-      
+            var s = song.GetSongUrl();
+
+            BassPlayer.Instance.Init();
+            BassPlayer.Instance.Play(s);
+
+
+   
+
 
             Console.ReadKey();
 
