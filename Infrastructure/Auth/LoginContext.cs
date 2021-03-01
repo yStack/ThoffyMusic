@@ -64,7 +64,7 @@ namespace Infrastructure.Auth
         /// 退出登录
         /// </summary>
         /// <returns></returns>
-        public bool Logout()
+        public static bool Logout()
         {
             var url = UrlHelper.RootUrl + "/logout";
             var str = UrlHelper.Get(url);

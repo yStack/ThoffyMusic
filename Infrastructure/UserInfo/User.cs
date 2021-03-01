@@ -21,7 +21,7 @@ namespace Infrastructure
     /// </summary>
     public class User : INotifyPropertyChanged
     {
-        #region INotifyPropertyChanged Interface 
+        #region INotifyPropertyChanged 接口实现
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)
@@ -32,7 +32,7 @@ namespace Infrastructure
         #endregion
 
 
-        #region fields
+        #region 字段
         private LoginContext _loginContext;
         private string _cellPhone;
         private string _email;
@@ -41,7 +41,7 @@ namespace Infrastructure
         #endregion
 
 
-        #region properties
+        #region 属性
         /// <summary>
         /// 昵称
         /// </summary>
@@ -124,7 +124,7 @@ namespace Infrastructure
 
         }
 
-        #region public methods
+        #region 公开方法
         /// <summary>
         /// 登录
         /// </summary>
@@ -166,7 +166,7 @@ namespace Infrastructure
         /// <returns></returns>
         public bool Logout()
         {
-            return _loginContext.Logout();
+            return LoginContext.Logout();
         }
 
         #endregion
