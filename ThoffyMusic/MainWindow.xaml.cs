@@ -18,7 +18,10 @@ namespace ThoffyMusic
             DataContext = _userViewModel;
         }
 
-
-
+        private void Login_Click(object sender, RoutedEventArgs e)
+        {
+            _userViewModel.User.Password = PasswordBox.Password;
+            _userViewModel.LoginCommand.Execute(null);
+        }
     }
 }

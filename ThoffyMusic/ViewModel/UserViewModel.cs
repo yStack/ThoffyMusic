@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using Infrastructure;
+using Infrastructure.UserInfo;
 
 namespace ThoffyMusic.ViewModel
 {
@@ -13,6 +15,7 @@ namespace ThoffyMusic.ViewModel
         private User _user;
         private string _phoneOrEmail;
         private bool _isLogin;
+        private LoginType _loginType;
 
         private ICommand _loginCommand;
 
@@ -42,10 +45,12 @@ namespace ThoffyMusic.ViewModel
                     if (_phoneOrEmail.Contains("@"))
                     {
                         _user.Email = _phoneOrEmail;
+                        _loginType = LoginType.Email;
                     }
                     else
                     {
                         _user.CellPhone = _phoneOrEmail;
+                        _loginType = LoginType.Phone;
                     }
                     OnPropertyChanged("PhoneOrEmail");
                 }
@@ -71,19 +76,21 @@ namespace ThoffyMusic.ViewModel
             {
                 return _loginCommand ?? (_loginCommand = new RelayCommand((obj) =>
                 {
-                    IsLogin = _user.Login(0);
-
-                    MessageBox.Show($"Login is {IsLogin.ToString()}");
+                    IsLogin = _user.Login(_loginType);
+                    var playlist = _user.Playlist;
+                    playlist.ForEach((t) => UserPlaylist.Add(t));
                 }));
             }
         }
+
+        public ObservableCollection<Playlist> UserPlaylist { get; }
+       
 
 
         public UserViewModel()
         {
             _user = new User();
+            UserPlaylist = new ObservableCollection<Playlist>();
         }
-
-
     }
 }

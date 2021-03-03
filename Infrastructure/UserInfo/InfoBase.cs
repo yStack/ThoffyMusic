@@ -4,9 +4,16 @@ using System.Text;
 
 namespace Infrastructure.UserInfo
 {
-    public class InfoBase
+    public class InfoBase : ViewModelBase
     {
-        public string Name { get; set; }
+        private string _name;
+        private UInt64 _id;
+
+        public string Name
+        {
+            get;
+            set;
+        }
 
         public UInt64 Id { get; set; }
 

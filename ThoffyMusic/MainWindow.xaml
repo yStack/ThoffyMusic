@@ -83,13 +83,14 @@
                         <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding PhoneOrEmail}"></TextBox>
 
                         <Label Content="{DynamicResource Password}" Grid.Row="1" Grid.Column="0"></Label>
-                        <PasswordBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></PasswordBox>
+                        <PasswordBox x:Name="PasswordBox" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></PasswordBox>
 
-                        <Button Command="{Binding LoginCommand}" Grid.Row="2" Grid.Column="1" Content="Login" Width="100" Height="25" HorizontalAlignment="Right"/>
+                        <Label Grid.Row="2" Grid.Column="1" Content="{Binding IsLogin}" VerticalAlignment="Center" HorizontalAlignment="Left"></Label>
+                        <Button x:Name="Login" Click="Login_Click" Grid.Row="2" Grid.Column="1" Content="Login" Width="100" Height="25" HorizontalAlignment="Right"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="测试">
-                    <Grid Background="Beige"></Grid>
+                    <ListView ItemsSource="{Binding UserPlaylist}" DisplayMemberPath="Name"></ListView>
                 </TabItem>
             </TabControl>
         </Grid>
