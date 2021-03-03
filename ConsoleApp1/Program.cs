@@ -11,11 +11,9 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             string email = "vonfat@126.com";
-            string pass = "wy&86147965";
-            string phone = "15295774040";
+            string pass = "test";
             User user = new Infrastructure.User();
             user.Email = email;
-            user.CellPhone = phone;
             user.Password = pass;
 
             var t = user.Login(0);
