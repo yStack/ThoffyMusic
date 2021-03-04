@@ -76,21 +76,29 @@ namespace ThoffyMusic.ViewModel
             {
                 return _loginCommand ?? (_loginCommand = new RelayCommand((obj) =>
                 {
+                    if (IsLogin) return;
+
                     IsLogin = _user.Login(_loginType);
                     var playlist = _user.Playlist;
                     playlist.ForEach((t) => UserPlaylist.Add(t));
+
+                    var p1 = playlist[0];
+                    var songlst = p1.SongList;
+                    songlst.ForEach(t => SongList.Add(t));
                 }));
             }
         }
 
-        public ObservableCollection<Playlist> UserPlaylist { get; }
-       
+        public ObservableCollection<Playlist> UserPlaylist { get; }  
+
+        public ObservableCollection<Song> SongList { get; }
 
 
         public UserViewModel()
         {
             _user = new User();
             UserPlaylist = new ObservableCollection<Playlist>();
+            SongList = new ObservableCollection<Song>();
         }
     }
 }

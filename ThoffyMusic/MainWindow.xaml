@@ -89,8 +89,11 @@
                         <Button x:Name="Login" Click="Login_Click" Grid.Row="2" Grid.Column="1" Content="Login" Width="100" Height="25" HorizontalAlignment="Right"/>
                     </Grid>
                 </TabItem>
-                <TabItem Header="测试">
+                <TabItem Header="歌单">
                     <ListView ItemsSource="{Binding UserPlaylist}" DisplayMemberPath="Name"></ListView>
+                </TabItem>
+                <TabItem Header="SongList">
+                    <ListView ItemsSource="{Binding SongList}" DisplayMemberPath="Id"></ListView>
                 </TabItem>
             </TabControl>
         </Grid>
